@@ -22,17 +22,17 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripcion: </label>
-                <textarea class="create-event-textarea" id="descripcion" name="descripcion"></textarea>
+                <textarea class="create-event-textarea" id="descripcion" name="descripcion" required></textarea>
             </div>
             <div class="mb-3 datetime">
                 <label for="exampleInputPassword1" class="form-label">Fecha: </label>
-                <input type="date" class="form-control" id="fecha" name="fecha">
+                <input type="date" class="form-control" id="fecha" name="fecha" required>
                 <label for="exampleInputPassword1" class="form-label">Hora: </label>
-                <input type="time" class="form-control" id="hora" name="hora">
+                <input type="time" class="form-control" id="hora" name="hora" required>
             </div>
             <div class="mb-3 location-capacity">
                 <label for="inputState" class="form-label">Ubicación: </label>
-                <select id="ubicacion" class="form-select" name="ubicacion">
+                <select id="ubicacion" class="form-select" name="ubicacion" required>
                   <option selected>Elegir...</option>
                   <%facultades.forEach(facultad=>{%><option value="<%= facultad.nombre %>"> <%=facultad.nombre%></option> <%});%>
                 </select>
@@ -40,15 +40,14 @@
                 <input type="number" class="form-capacity" id="capacidad_maxima" aria-describedby="capHelp" name="capacidad_maxima" required>
                 <small id="capError" class="text-danger" style="display: none;">Este campo es obligatorio*</small>
             </div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Tipo de evento:
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Seminario</a></li>
-                  <li><a class="dropdown-item" href="#">Taller</a></li>
-                  <li><a class="dropdown-item" href="#">Conferencia</a></li>
-                </ul>
+            <div class="mb-3">
+                <label for="inputState" class="form-label">Tipo de evento: </label>
+                <select id="tipo" class="form-select" name="tipo" required>
+                  <option selected>Elegir...</option>
+                    <option value="seminario">Seminario</option>
+                    <option value="taller">Taller</option>
+                    <option value="conferencia">Conferencia</option>
+                </select>
             </div>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="validate()">
                 Crear

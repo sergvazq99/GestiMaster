@@ -74,9 +74,11 @@ nav img{
     height:1px;
     color:aliceblue;
 }
+
 .dropdown .dropdown-menu{
     background-color: black;
     border-radius: 20px;
+    padding:20px;
 }
 .dropdown .dropdown-item{
     color:aliceblue;
@@ -150,6 +152,16 @@ footer ul{
     display: flex;
     justify-content: left;
 }
+.settings-form{
+    justify-items: center;
+    width: 500px;
+    padding:30px;
+    margin-left: 35%;
+    margin-top: 10%;
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
 .login-form{
     justify-items: center;
     width: 500px;
@@ -171,14 +183,12 @@ footer ul{
     background-color: aliceblue;
 }
 .inscribe-form{
-    justify-items: center;
-    width: 500px;
-    height: 440px;
-    margin-left: 35%;
-    margin-top: 10%;
-    border-radius: 30px;
-    border-color: black;
-    background-color: aliceblue;
+    text-align: center;
+    padding:20px;
+}
+.events-form{
+    text-align: center;
+    padding:20px;
 }
 .create-event-form{
     justify-items: center;
@@ -190,8 +200,15 @@ footer ul{
     border-color: black;
     background-color: aliceblue;
 }
-.profile-photo-form{
-
+.forget-password-form{
+    justify-items: center;
+    width: 500px;
+    padding:30px;
+    margin-left: 35%;
+    margin-top: 10%;
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
 }
 .mb-3.datetime,.mb-3.location-capacity{
     display: flex;
@@ -231,7 +248,7 @@ footer ul{
     width:100%;
     height: 160px;
 }
-.inscribe-form hr,.create-event-form hr,.register-form hr,.login-form hr{
+.inscribe-form hr,.create-event-form hr,.register-form hr,.login-form hr, .settings-form hr{
     height: 1px;
     width: 100%;
 }
@@ -241,8 +258,12 @@ footer ul{
 .register-form button{
     margin-top: 20%;
 }
-.inscribe-form button,.create-event-form button{
+.create-event-form,.inscribe-form,.settings-form button{
     margin-top: 10%;
+}
+.inscribe-form button{
+    height: 30px;
+    width:50px;
 }
 .mb-3{
     width: 50%;
@@ -256,6 +277,7 @@ footer ul{
     padding:20px;
     width: 85%;
 }
+
 .events-title{
     text-align: center;
     margin-top: 10px;
@@ -265,19 +287,48 @@ footer ul{
 
 }
 .btn.btn-info{
-    border-radius: 15px;
+    border-radius: 25px;
+    width:100%;
     background-color:transparent;
     border-color: rgb(4, 20, 245);
+    color:rgb(4, 20, 245);
 }
-.container.text-center .card.card-body{
+.container.text-center .card-body{
     text-align: left;
     background-color: rgb(192, 192, 192);
     color:black;
     border-style: none;
+}
+.container.text-center .card-text{
+    text-align:left;
 }
 .modal-footer button{
     justify-items: center;
 }
 .modal-body{
     text-align: center;
+}
+.list-group-item{
+    width:90%;
+    padding:1%;
+    margin-top: 5px;
+    border-radius: 10px;
+}
+.delete-message{
+    display: flex;
+    gap:90%;
+}
+.btn.btn-primary.trash{
+    height: 35px;
+    width:5%;
+    text-align: center;
+    justify-content: right;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+.non-styled-button{
+    border-style: none;
+    background-color: transparent;
+    color:aliceblue;
 }

@@ -3,6 +3,7 @@ CREATE TABLE Inscripciones (
     evento_id INT NOT NULL,
     estado_inscripcion ENUM('inscrito', 'lista de espera') NOT NULL,
     fecha_inscripcion DATE NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
     PRIMARY KEY (usuario_id, evento_id),
     FOREIGN KEY (usuario_id) REFERENCES Usuarios(id),
     FOREIGN KEY (evento_id) REFERENCES Eventos(id)
