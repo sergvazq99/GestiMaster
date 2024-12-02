@@ -1,19 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Bienvenido</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
-    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous" >
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     
+    <title>Bienvenido</title>
+    
+
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <link rel="icon" href="images/logo.webp" type="image/png">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"/>
+    
+   
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     
 </head>
+
 <body>
     
   
@@ -23,18 +27,22 @@
         <nav class="navbar navbar-expand-lg">
             <div class="d-flex justify-content-start w-100 text-white"> <a id="titulo" href="/"class="display-5 ms-3 mb-2 text-white"><em>Inicio</em></a><span></div>
             <%if(user.nombre){%>
+                
                 <%if(user.rol==="organizador"){%>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
                     <ul><a href="/create-event">Crear eventos</a></ul>
                     <ul><a href="/ListAlumns">Lista de alumnos en eventos</a></ul>
                 <%}
                 else{%>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                    <%}%>
                   
-                <%}%>
+                
                 <div class="d-flex justify-content-end align-items-center ms-auto" id="profile-section">
                     <div id="usuario">
                                 <%=user.nombre %>
                     </div>
-                    <img class="imageUser ms-3" src="images/no profile.avif" alt="usuario">
+                    <img class="imageUser ms-3" src="/user-image"alt="usuario">
 
                     <div class="dropdown">
                             <button id="btn-config" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -102,10 +110,14 @@
                                 </svg> Tus inscripciones</a></li>
                             <%}%>
                             
-                                <li><a class="dropdown-item" href="/change-photo"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
-                                    <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                                    <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/>
-                                </svg> Cambiar foto</a> </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePhotoModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
+                                            <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                            <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/>
+                                        </svg> Cambiar foto
+                                    </a>
+                                </li>
                             <hr>
                             <li><a class="dropdown-item" href="/logout"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-closed" viewBox="0 0 16 16">
                                 <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3zm1 13h8V2H4z"/>
@@ -115,11 +127,7 @@
                         </div> 
                 </div>
               
-            <% }
-            else{%>
-                
-               
-            <%}%>
+            <% }%>
               
         </nav>
     </header>
@@ -152,11 +160,6 @@
                       Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</span>
                       <%if(user.rol==="asistente"){%>
                         <%- include('inscribe') %>
-                        <%}
-                        else{%>
-                
-                
-                
                         <%}%>
                       
                 
@@ -193,6 +196,28 @@
         <div class="close"><ul><a href="/logout">Cerrar sesión</a></ul></div>
         <div class="copy"><p>© 2024 Todos los derechos reservados.</p></div>
     </footer>
+
+
+<!-- Modal -->
+<div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePhotoModalLabel">Cambiar Foto de Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/upload-image" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label">Subir Nueva Imagen</label>
+                        <input class="form-control" type="file" id="imagen" name="imagen" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar Imagen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Modal -->
 <div class="modal fade" id="fontSizeModal" tabindex="-1" aria-labelledby="fontSizeModalLabel" aria-hidden="true">

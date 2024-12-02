@@ -32,7 +32,8 @@
                     <div id="usuario">
                                 <%=user.nombre %>
                     </div>
-                    <img class="imageUser ms-3" src="images/no profile.avif" alt="usuario">
+                    <img class="imageUser ms-3" src="/user-image"alt="usuario">
+
 
                     <div class="dropdown">
                             <button id="btn-config" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -99,10 +100,12 @@
                                 </svg> Tus inscripciones</a></li>
                             <%}%>
                             
-                                <li><a class="dropdown-item" href="/change-photo"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
-                                    <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                                    <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/>
-                                </svg> Cambiar foto</a> </li>
+                                <li>    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePhotoModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
+                                            <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                            <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/>
+                                        </svg> Cambiar foto
+                                    </a> </li>
                             <hr>
                             <li><a class="dropdown-item" href="/logout"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-closed" viewBox="0 0 16 16">
                                 <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3zm1 13h8V2H4z"/>
@@ -209,6 +212,29 @@
         <div class="close"><ul><a href="/logout">Cerrar sesión</a></ul></div>
         <div class="copy"><p>© 2024 Todos los derechos reservados.</p></div>
     </footer>
+
+    
+<!-- Modal -->
+<div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePhotoModalLabel">Cambiar Foto de Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/upload-image" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label">Subir Nueva Imagen</label>
+                        <input class="form-control" type="file" id="imagen" name="imagen" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar Imagen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- Modal -->
 <div class="modal fade" id="fontSizeModal" tabindex="-1" aria-labelledby="fontSizeModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -129,6 +129,18 @@ a:hover{
     border-color: black;
     background-color: aliceblue;
 }
+.update-form{
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
 .product{
     text-align: center;
     color:rgb(35, 2, 57);

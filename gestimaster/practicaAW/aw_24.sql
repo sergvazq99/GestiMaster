@@ -197,28 +197,31 @@ INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
 --
 
 CREATE TABLE `usuarios` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `correo` varchar(100) NOT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `facultad` varchar(255) DEFAULT NULL,
-  `rol` enum('organizador','asistente') NOT NULL,
-  `contrasenia` varchar(20) DEFAULT NULL
+  `rol` enum('organizador', 'asistente') NOT NULL,
+  `contrasenia` varchar(20) DEFAULT NULL,
+  `imagen` LONGBLOB DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `telefono`, `facultad`, `rol`, `contrasenia`) VALUES
-(1, 'Sergio', 'sergvazq@ucm.es', '913572715', 'Facultad de Informática', 'asistente', NULL),
-(2, 'Javier', 'javier@ucm.es', '913572715', 'Facultad de Química', 'asistente', 'javi123'),
-(3, 'Eduardo', 'edu@ucm.es', '691623394', 'Facultad de Informática', 'organizador', NULL),
-(4, 'Esteban', 'esteban@ucm.es', '123456789', 'Facultad de Farmacia', 'organizador', 'esteban123'),
-(5, 'dieguillo', 'dieguillo@ucm.es', '913572715', 'Facultad de Geología', 'organizador', 'dieguillo123'),
-(6, 'angel', 'angel@ucm.es', '647823451', 'Facultad de Farmacia', 'asistente', 'angel123'),
-(7, 'anibal', 'anibal@ucm.es', '913572715', 'Facultad de Físicas', 'asistente', 'anibal123'),
-(8, 'alba', 'alba@ucm.es', '913572715', 'Facultad de Farmacia', 'organizador', 'alba123');
+INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `telefono`, `facultad`, `rol`, `contrasenia`, `imagen`) VALUES
+(1, 'Sergio', 'sergvazq@ucm.es', '913572715', 'Facultad de Informática', 'asistente', NULL, NULL),
+(2, 'Javier', 'javier@ucm.es', '913572715', 'Facultad de Química', 'asistente', 'javi123', NULL),
+(3, 'Eduardo', 'edu@ucm.es', '691623394', 'Facultad de Informática', 'organizador', NULL, NULL),
+(4, 'Esteban', 'esteban@ucm.es', '123456789', 'Facultad de Farmacia', 'organizador', 'esteban123', NULL),
+(5, 'dieguillo', 'dieguillo@ucm.es', '913572715', 'Facultad de Geología', 'organizador', 'dieguillo123', NULL),
+(6, 'angel', 'angel@ucm.es', '647823451', 'Facultad de Farmacia', 'asistente', 'angel123', NULL),
+(7, 'anibal', 'anibal@ucm.es', '913572715', 'Facultad de Físicas', 'asistente', 'anibal123', NULL),
+(8, 'alba', 'alba@ucm.es', '913572715', 'Facultad de Farmacia', 'organizador', 'alba123', NULL);
+
 
 --
 -- Índices para tablas volcadas
