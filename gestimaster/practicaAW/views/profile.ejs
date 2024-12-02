@@ -17,7 +17,7 @@
     <header>
         <img src="images/logo.webp" title="Gestimaster" alt="gestimaster">
         <h1>Portal de Gestión de Eventos Universitarios</h1>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg">
             <div class="d-flex justify-content-start w-100 text-white"> <a id="titulo" href="/"class="display-5 ms-3 mb-2 text-white"><em>Inicio</em></a><span></div>
             <%if(user.nombre){%>
                 <%if(user.rol==="organizador"){%>
@@ -158,13 +158,69 @@
 });
 
 
-     
-        function darkTheme(){
-            document.body.classList.toggle("dark-theme");
-        }
-        function lightTheme(){
-            document.body.classList.toggle("light-theme");
-        }
+function resetContrast() {
+    document.body.style.backgroundColor = "";
+    document.body.style.color = "";
+    document.querySelectorAll('.navbar, footer').forEach(function(element) {
+        element.style.backgroundColor = "";
+    });
+    document.querySelectorAll('.navbar a, .dropdown-menu, .dropdown-item').forEach(function(element) {
+        element.style.color = "";
+    });
+    document.querySelectorAll('.table-container').forEach(function(element) {
+        element.style.backgroundColor = "";
+        element.style.color = "";
+    });
+
+}
+function lightTheme() {
+    document.body.style.backgroundColor = "#ffffff";
+    document.body.style.color = "#000000";
+
+
+    document.querySelectorAll('nav, footer').forEach(function(element) {
+        element.style.backgroundColor = "rgb(144, 199, 247)";
+    });
+
+    
+    document.querySelector('header').style.backgroundColor = "rgb(120, 170, 212)";
+    document.querySelector('header h1').style.color = "#000000"; 
+
+    document.querySelectorAll('.navbar a, .dropdown-menu, .dropdown-item').forEach(function(element) {
+        element.style.color = "#000000";
+    });
+
+ 
+    document.querySelectorAll('.dropdown-menu').forEach(function(element) {
+        element.style.backgroundColor = "#ffffff";
+    });
+
+    document.querySelector('footer').style.color = "#000000";
+    document.querySelector('#usuario').style.color = "#000000";
+    document.querySelectorAll('.table-container').forEach(function(element) {
+        element.style.backgroundColor = "#ffffff";
+        element.style.color = "#000000";
+    });
+
+   
+}
+
+
+function darkTheme() {
+    document.body.style.backgroundColor = "#343a40";
+    document.body.style.color = "#ffffff";
+    document.querySelectorAll('.navbar, footer').forEach(function(element) {
+        element.style.backgroundColor = "#212529";
+    });
+    document.querySelectorAll('.navbar a, .dropdown-menu, .dropdown-item').forEach(function(element) {
+        element.style.color = "#ffffff";
+    });
+    document.querySelectorAll('.table-container').forEach(function(element) {
+        element.style.backgroundColor = "#343a40";
+        element.style.color = "#ffffff";
+    });
+    
+}
     </script>
 </body>
 
