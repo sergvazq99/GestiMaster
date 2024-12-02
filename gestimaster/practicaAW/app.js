@@ -32,12 +32,19 @@ app.use(middlewareSession);
 
 
 app.get("/",(req,res)=>{
-    res.render("index", {user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null }});
+    const userId=req.session.userId;
+    pool.query("SELECT id,titulo,descripcion,fecha,hora,ubicacion,capacidad_maxima FROM eventos",(err,results)=>{
+        if(err){
+            console.log("error");
+        }
+        else{
+            res.render("index", {eventos:results,userId,user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null }});
+ 
+        }
+    });
+    
 });
 
-app.get("/login",(req,res)=>{
-    res.render("login");
-});
 
 app.post("/login",(req,res)=>{
     const {correo,contrasenia}=req.body;
@@ -124,7 +131,7 @@ app.get("/update",(req,res)=>{
                 if(err){
                     console.log("algún dato del usuario no se procesó corrctamente");
                 }
-                res.render("update",{facultades:results,usuario:usuario});
+                res.render("update",{user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null },facultades:results,usuario:usuario});
             });
         }
     });
@@ -231,7 +238,7 @@ app.get("/messages",(req,res)=>{
         if(err){
             console.log("Error al obtener el mensaje");
         }
-        res.render("messages",{mensajes:results});
+        res.render("messages",{user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null },mensajes:results});
         
     });
 });
@@ -253,7 +260,7 @@ app.get("/create-event",(req,res)=>{
 
         }
         else{
-            res.render("create-event",{facultades:results});
+            res.render("create-event",{user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null },facultades:results});
         }
     });
 });
@@ -373,14 +380,15 @@ app.post("/edit/:id", (req, res) => {
 app.get("/inscriptions",(req,res)=>{
     const org_id=req.session.userId;
     const sql="SELECT E.id AS evento_id,E.titulo, E.descripcion, E.fecha,E.hora,E.ubicacion,E.capacidad_maxima,I.estado_inscripcion,"+
-    "I.fecha_inscripcion,I.tipo_inscripcion AS tipo_inscripcion FROM inscripciones I JOIN eventos E ON I.evento_id = E.id WHERE I.usuario_id = ?";
+    "I.fecha_inscripcion FROM inscripciones I JOIN eventos E ON I.evento_id = E.id WHERE I.usuario_id = ?";
             
     pool.query(sql,[req.session.userId],(err,results)=>{
         if(err){
+            
             console.log("error");
         }
         else{
-            res.render("inscriptions",{inscripciones:results});
+            res.render("inscriptions",{user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null },inscripciones:results,user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null }});
         }
     });
 });
@@ -392,11 +400,33 @@ app.get("/events",(req,res)=>{
             console.log("error");
         }
         else{
-            res.render("events",{eventos:results});
+            res.render("events",{user:{ nombre: req.session.nombre,correo:req.session.correo,rol: req.session.rol|| null },eventos:results});
         }
     });
 });
 
+app.get("/listAlumns", (req, res) => {
+    const sql = `
+        SELECT 
+            I.usuario_id, 
+            U.nombre AS usuario_nombre, 
+            E.titulo AS evento_nombre, 
+            I.estado_inscripcion, 
+            I.fecha_inscripcion 
+        FROM inscripciones I 
+        JOIN usuarios U ON I.usuario_id = U.id 
+        JOIN eventos E ON I.evento_id = E.id
+    `;
+    
+    pool.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error querying the database:", err);
+            return res.status(500).send("Error querying the database.");
+        }
+
+        res.render("listAlumns", { inscripciones: results, user: { nombre: req.session.nombre, correo: req.session.correo, rol: req.session.rol || null } });
+    });
+});
 
 
 

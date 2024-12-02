@@ -90,12 +90,44 @@ nav img{
 a:hover{
     color: rgb(4, 25, 250);
 }
-.login{
-    text-align: center;
+.login-form {
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
 }
-.login a{
-    text-decoration: none;
-    color:aliceblue;
+#btn-config{
+    color: rgb(255, 255, 255);
+    background-color: rgb(54, 54, 51);
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
+    border: 2px solid 8d1f2a;
+    transition: all .3s ease;
+  }
+  #btn-config:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(54, 54, 51);
+  }
+#usuario { color: aliceblue; margin-right: 10px; }
+#usuario:hover { text-decoration: underline; }
+.register-form {
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
 }
 .product{
     text-align: center;
@@ -152,36 +184,21 @@ footer ul{
     display: flex;
     justify-content: left;
 }
+
 .settings-form{
+    border: 2px solid #343a40;
     justify-items: center;
     width: 500px;
-    padding:30px;
-    margin-left: 35%;
+    padding: 30px;
+    margin: auto;
     margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 30px;
     border-color: black;
     background-color: aliceblue;
 }
-.login-form{
-    justify-items: center;
-    width: 500px;
-    padding:30px;
-    margin-left: 35%;
-    margin-top: 10%;
-    border-radius: 30px;
-    border-color: black;
-    background-color: aliceblue;
-}
-.register-form{
-    justify-items: center;
-    width: 500px;
-    padding:40px;
-    margin-left: 35%;
-    margin-top: 5%;
-    border-radius: 30px;
-    border-color: black;
-    background-color: aliceblue;
-}
+
+
 .inscribe-form{
     text-align: center;
     padding:20px;
@@ -190,22 +207,29 @@ footer ul{
     text-align: center;
     padding:20px;
 }
+
+#titulo:hover { text-decoration: underline; }
+
 .create-event-form{
+    border: 2px solid #343a40;
     justify-items: center;
     width: 500px;
-    padding:40px;
-    margin-left: 35%;
-    margin-top: 5%;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 30px;
     border-color: black;
     background-color: aliceblue;
 }
 .forget-password-form{
+    border: 2px solid #343a40;
     justify-items: center;
     width: 500px;
-    padding:30px;
-    margin-left: 35%;
+    padding: 30px;
+    margin: auto;
     margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 30px;
     border-color: black;
     background-color: aliceblue;
@@ -223,11 +247,15 @@ footer ul{
     width:50px;
 }
 .profile{
-    width: 300px;
-    padding: 20px; 
-    margin-left: 40%;
-    margin-top: 15%;
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 30px;
+    border-color: black;
     background-color: aliceblue;
 }
 .profile h3{
