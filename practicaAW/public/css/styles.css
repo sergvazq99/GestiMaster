@@ -1,0 +1,398 @@
+body{
+    background-color: rgb(138, 138, 236);
+}
+header{
+    background-color: black;
+}
+img{
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+header h1{
+    color:aliceblue;
+    text-align: center;
+}
+nav{
+    height: 42.5px;
+    background-color: rgb(54, 51, 51);
+}
+nav a{
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    color:aliceblue;
+}
+nav ul{
+    margin-right: 40px;
+}
+nav h4{
+    justify-content: center;
+    color:aliceblue;
+}
+nav .btn.btn-secondary{
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    padding: 0;
+}
+nav img{
+    display: flex;
+    align-items: center;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-top: 0;
+}
+
+.dropdown-menu hr{
+    height:1px;
+    color:aliceblue;
+}
+
+.dropdown .dropdown-menu{
+    background-color: black;
+    border-radius: 20px;
+    padding:20px;
+}
+.dropdown .dropdown-item{
+    color:aliceblue;
+}
+.dropdown .dropdown-item:hover{
+    background-color: gray;
+    border-radius: 10px;
+}
+a:hover{
+    color: rgb(4, 25, 250);
+}
+.login-form {
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
+.login h4{
+    text-align: center;
+}
+.product{
+    text-align: center;
+    color:rgb(35, 2, 57);
+    margin-top: 200px;
+}
+#btn-config{
+    color: rgb(255, 255, 255);
+    background-color: rgb(54, 54, 51);
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    border: 2px solid 8d1f2a;
+    transition: all .3s ease;
+}
+#btn-config:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(54, 54, 51);
+}
+.tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    width: 120px;
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s;
+    font-size: 0.85em;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+#btn-config:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+#usuario {
+    color: aliceblue;
+    margin-right: 10px;
+}
+#usuario:hover {
+    text-decoration:
+    underline; 
+}
+.register-form {
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
+.update-form{
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
+.product{
+    text-align: center;
+    color:rgb(35, 2, 57);
+    margin-top: 200px;
+}
+.btn.btn-primary{
+    border-radius: 30px;
+    height: 50px;
+    width:150px;
+}
+#reg{
+    background-color: rgba(0, 0, 0, 0);
+    border-color: black;
+}
+#reg:hover{
+    background-color: black;
+}
+#reg a{
+    color:black;
+}
+#reg a:hover{
+    color: aliceblue;
+}
+.content{
+    height: 100%;
+}
+footer{
+    height: 500px;
+    width: 100%;
+    background-color: black;
+    align-content: center;
+}
+footer .info{
+    justify-content: right;
+}
+footer{
+    color:aliceblue;
+}
+.close{
+    margin-top: 50px; 
+}
+.close a{
+    color:red;
+    text-decoration: none;
+    
+}
+.copy{
+    text-align: center;
+    font-style: italic;
+    color:rgb(103, 103, 103);
+}
+.images{
+    display: flex;
+    justify-content: left;
+}
+
+.settings-form{
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
+
+
+.inscribe-form{
+    text-align: center;
+    padding:20px;
+}
+.events-form{
+    text-align: center;
+    padding:20px;
+}
+
+#titulo:hover { text-decoration: underline; }
+
+.create-event-form{
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
+.forget-password-form{
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
+.mb-3.datetime,.mb-3.location-capacity{
+    display: flex;
+    justify-content: center;
+    gap:10px;
+}
+.mb-3.location-capacity .form-select{
+    width:100px;
+   
+}
+.mb-3.location-capacity .form-capacity{
+    width:50px;
+}
+.profile{
+    border: 2px solid #343a40;
+    justify-items: center;
+    width: 500px;
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    border-color: black;
+    background-color: aliceblue;
+}
+.profile h3{
+    text-align: center;
+}
+.table tr{
+    color:aliceblue;
+    justify-content: center;
+}
+.mb-3.capacity{
+    display: flex;
+}
+.mb-3.capacity .form-control{
+    width: 25%;
+    margin-left: 20px;
+}
+.create-event-textarea{
+    width:100%;
+    height: 160px;
+}
+.inscribe-form hr,.create-event-form hr,.register-form hr,.login-form hr, .settings-form hr{
+    height: 1px;
+    width: 100%;
+}
+.login-form button{
+    margin-top: 40%;
+}
+.register-form button{
+    margin-top: 20%;
+}
+.create-event-form,.inscribe-form,.settings-form button{
+    margin-top: 10%;
+}
+.inscribe-form button{
+    height: 30px;
+    width:50px;
+}
+.mb-3{
+    width: 50%;
+}
+.card.text-bg-secondary.mb-3{
+    text-align:center;
+    margin-top: 30px;
+    background-color: rgb(192, 192, 192);
+    color:black;
+    border-radius: 10px;
+    padding:20px;
+    width: 85%;
+}
+
+.events-title{
+    text-align: center;
+    margin-top: 10px;
+}
+.d-inline-flex.gap-1 {
+    justify-content: center;
+
+}
+.btn.btn-info{
+    border-radius: 25px;
+    width:100%;
+    background-color:transparent;
+    border-color: rgb(4, 20, 245);
+    color:rgb(4, 20, 245);
+}
+.container.text-center .card-body{
+    text-align: left;
+    background-color: rgb(192, 192, 192);
+    color:black;
+    border-style: none;
+}
+.container.text-center .card-text{
+    text-align:left;
+}
+.modal-footer button{
+    justify-items: center;
+}
+.modal-body{
+    text-align: center;
+}
+.list-group-item{
+    width:90%;
+    padding:1%;
+    margin-top: 5px;
+    border-radius: 10px;
+}
+.delete-message{
+    display: flex;
+    gap:90%;
+}
+.delete-event{
+    display: flex;
+    align-content: center;
+    text-align: center;
+    justify-content: center;
+    gap:10%;
+}
+.btn-primary.event{
+    height: 35px;
+    width: 45px;
+    text-align: center;
+    justify-content: right;
+    border-radius: 20px;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+.non-styled-button{
+    border-style: none;
+    background-color: transparent;
+    color:aliceblue;
+}
+
