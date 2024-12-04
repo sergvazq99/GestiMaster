@@ -166,20 +166,75 @@ app.post("/register", (req, res) => {
 app.post('/update-event/:id', (req, res) => {
     const { titulo, descripcion, fecha, hora, ubicacion, capacidad_maxima, tipo } = req.body;
     const id = req.params.id;
-    console.log('Datos recibidos:', req.body);
 
-    // Consulta para actualizar el evento en la base de datos
-    pool.query("UPDATE eventos SET titulo=?, descripcion=?, fecha=?, hora=?, ubicacion=?, capacidad_maxima=?, tipo=? WHERE id=?",
-        [titulo, descripcion, fecha, hora, ubicacion, capacidad_maxima, tipo, id], (err) => {
+    // Verificar el número actual de inscritos
+    pool.query("SELECT COUNT(*) AS inscritos_actuales FROM inscripciones WHERE evento_id = ? AND estado_inscripcion = 'inscrito'", [id], (err, result) => {
+        if (err) {
+            console.error("Error al verificar el número de inscritos:", err);
+            return res.status(500).send("Error al verificar el número de inscritos");
+        }
+
+        const inscritosActuales = result[0].inscritos_actuales;
+        const nuevaCapacidad = parseInt(capacidad_maxima, 10);
+
+        // Verificar si la nueva capacidad es menor a la actual
+        if (nuevaCapacidad < inscritosActuales) {
+            return res.status(400).send("La capacidad máxima no puede ser menor al número de inscritos actuales");
+        }
+
+        // Actualizar el evento
+        pool.query("UPDATE eventos SET titulo = ?, descripcion = ?, fecha = ?, hora = ?, ubicacion = ?, capacidad_maxima = ?, tipo = ? WHERE id = ?", 
+            [titulo, descripcion, fecha, hora, ubicacion, capacidad_maxima, tipo, id], (err) => {
             if (err) {
-                console.error("Error al actualizar el evento");
-                res.json({ success: false, message: "Error al actualizar el evento" });
+                console.error("Error al actualizar el evento:", err);
+                return res.status(500).send("Error al actualizar el evento");
+            }
+
+            // Verificar y actualizar los inscritos desde la lista de espera
+            if (nuevaCapacidad > inscritosActuales) {
+                const cupoDisponible = nuevaCapacidad - inscritosActuales;
+                pool.query("SELECT usuario_id FROM inscripciones WHERE evento_id = ? AND estado_inscripcion = 'lista de espera' ORDER BY fecha_inscripcion ASC LIMIT ?", 
+                    [id, cupoDisponible], (err, usuariosEnEspera) => {
+                    if (err) {
+                        console.error("Error al obtener usuarios en espera:", err);
+                        return res.status(500).send("Error al obtener usuarios en espera");
+                    }
+
+                    if (usuariosEnEspera.length > 0) {
+                        const idsUsuariosEnEspera = usuariosEnEspera.map(usuario => usuario.usuario_id);
+                        const mensajes = usuariosEnEspera.map(usuario => [
+                            usuario.usuario_id, 
+                            `Usted ha pasado de la lista de espera a estar inscrito en el evento "${titulo}".`
+                        ]);
+
+                        pool.query("INSERT INTO mensajes (user_id, mensaje) VALUES ?", [mensajes], (err) => {
+                            if (err) {
+                                console.error("Error al insertar mensajes:", err);
+                                return res.status(500).send("Error al insertar mensajes");
+                            }
+
+                            // Actualizar el estado de inscripción a "inscrito"
+                            pool.query("UPDATE inscripciones SET estado_inscripcion = 'inscrito' WHERE usuario_id IN (?) AND evento_id = ?", 
+                                [idsUsuariosEnEspera, id], (err) => {
+                                if (err) {
+                                    console.error("Error al actualizar usuarios en espera:", err);
+                                    return res.status(500).send("Error al actualizar usuarios en espera");
+                                }
+                                res.redirect("/events");
+                            });
+                        });
+                    } else {
+                        res.redirect("/events");
+                    }
+                });
             } else {
                 res.redirect("/events");
             }
-        }
-    );
+        });
+    });
 });
+
+
 
 
 
@@ -425,7 +480,7 @@ app.post("/delete/:id", (req, res) => {
         }
     });
 });
-    
+
 app.post("/delete_message/:id", (req, res) => {
     const { id } = req.params;
 
@@ -574,7 +629,7 @@ app.get("/events", (req, res) => {
     const org_id = req.session.userId;
     const searchTerm = req.query.q || '';
 
-    let query = "SELECT id, titulo, descripcion, fecha, hora, ubicacion, capacidad_maxima, tipo FROM eventos WHERE organizador_id = ?";
+    let query = ` SELECT e.id, e.titulo, e.descripcion, e.fecha, e.hora, e.ubicacion, e.capacidad_maxima, e.tipo, (SELECT COUNT(*) FROM inscripciones i WHERE i.evento_id = e.id AND i.estado_inscripcion = 'inscrito') AS inscritos FROM eventos e WHERE e.organizador_id = ? `;
     let params = [org_id];
     if (searchTerm) {
         query += `

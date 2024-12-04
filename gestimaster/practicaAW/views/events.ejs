@@ -281,8 +281,9 @@
                                 </div>
                                 <div class="mb-3">
                                   <label for="capacidad-<%= evento.id %>" class="form-label">Capacidad máxima</label>
-                                  <input type="number" class="form-control" id="capacidad-<%= evento.id %>" name="capacidad_maxima" value="<%= evento.capacidad_maxima %>" required>
-                                </div>
+                                  <input type="number" class="form-control" id="capacidad-<%= evento.id %>" name="capacidad_maxima" value="<%= evento.capacidad_maxima %>" min="<%= evento.inscritos %>" required>
+                              </div>
+                              
                                 <div class="mb-3">
                                   <label for="tipo-<%= evento.id %>" class="form-label">Tipo de evento</label>
                                   <input type="text" class="form-control" id="tipo-<%= evento.id %>" name="tipo" value="<%= evento.tipo %>" required>
