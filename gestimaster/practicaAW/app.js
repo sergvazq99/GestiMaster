@@ -47,26 +47,28 @@ app.post('/upload-image', upload.single('imagen'), (req, res) => {
             console.error("Error al actualizar la imagen:", err);
             return res.status(500).send("Error al actualizar la imagen");
         }
-        res.redirect("/"); 
+        res.redirect("/");
     });
 });
 
 app.get('/user-image', (req, res) => {
-     const userId = req.session.userId; 
-     pool.query("SELECT imagen FROM usuarios WHERE id = ?", [userId], (err, results) => {
-         if (err || !results[0].imagen) { // Si hay un error o no hay imagen, enviamos una imagen predeterminada 
-            return res.sendFile(path.join(__dirname, "public", "imagenes", "perfil.jpg")); } 
-            else { res.writeHead(200, {'Content-Type': 'image/jpeg'}); 
-            res.end(results[0].imagen); 
-        } 
+    const userId = req.session.userId;
+    pool.query("SELECT imagen FROM usuarios WHERE id = ?", [userId], (err, results) => {
+        if (err || !results[0].imagen) { // Si hay un error o no hay imagen, enviamos una imagen predeterminada 
+            return res.sendFile(path.join(__dirname, "public", "imagenes", "perfil.jpg"));
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+            res.end(results[0].imagen);
+        }
     });
- });
- 
- app.get("/", (req, res) => {
+});
+
+app.get("/", (req, res) => {
     const userId = req.session.userId;
     const searchTerm = req.query.q || '';
 
-    const query = `
+    let query = `
         SELECT e.id, e.titulo, e.descripcion, e.fecha, e.hora, e.ubicacion, e.capacidad_maxima, e.tipo,
                COALESCE(i.estado_inscripcion, 'no_inscrito') AS estado_inscripcion
         FROM eventos e
@@ -75,8 +77,15 @@ app.get('/user-image', (req, res) => {
     let params = [userId];
 
     if (searchTerm) {
-        query += " WHERE e.titulo LIKE ? OR e.descripcion LIKE ?";
-        params.push(`%${searchTerm}%`, `%${searchTerm}%`);
+        query += ` WHERE 
+            e.titulo LIKE ? OR 
+            e.descripcion LIKE ? OR 
+            e.fecha LIKE ? OR 
+            e.tipo LIKE ? OR 
+            e.ubicacion LIKE ? OR 
+            e.capacidad_maxima LIKE ?`;
+        const wildcardSearch = `%${searchTerm}%`;
+        params.push(wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch);
     }
 
     pool.query(query, params, (err, results) => {
@@ -230,7 +239,7 @@ app.get("/inscribe", (req, res) => {
         FROM eventos e
         LEFT JOIN inscripciones i ON e.id = i.evento_id AND i.usuario_id = ?
     `;
-console.log(eventos.estado_inscripcion);
+    console.log(eventos.estado_inscripcion);
     pool.query(query, [userId], (err, results) => {
         if (err) {
             console.error("Error en la consulta de eventos:", err);
@@ -246,10 +255,10 @@ app.post("/inscribe", (req, res) => {
     const { usuario_id, evento_id, estado_inscripcion } = req.body;
 
     const checkCapacityQuery = `
-        SELECT capacidad_maxima, 
+        SELECT e.capacidad_maxima, e.titulo, 
                (SELECT COUNT(*) FROM inscripciones WHERE evento_id = ? AND estado_inscripcion = 'inscrito') AS inscritos
-        FROM eventos 
-        WHERE id = ?
+        FROM eventos e
+        WHERE e.id = ?
     `;
 
     pool.query(checkCapacityQuery, [evento_id, evento_id], (err, results) => {
@@ -258,18 +267,32 @@ app.post("/inscribe", (req, res) => {
             return res.status(500).json({ success: false, message: "Error al procesar la inscripción." });
         }
 
-        const { capacidad_maxima, inscritos } = results[0];
+        const { capacidad_maxima, inscritos, titulo } = results[0];
         let estado = inscritos >= capacidad_maxima ? 'lista de espera' : 'inscrito';
+        let mensaje = "";
+
+        if (estado === 'lista de espera') {
+            mensaje = `Usted ha entrado en la lista de espera del evento "${titulo}" porque la capacidad máxima ha sido superada.`;
+        } else {
+            mensaje = `Usted se ha inscrito al evento "${titulo}".`;
+        }
 
         pool.query("INSERT INTO inscripciones (usuario_id, evento_id, estado_inscripcion, fecha_inscripcion) VALUES (?, ?, ?, NOW())",
             [usuario_id, evento_id, estado], (err) => {
                 if (err) {
                     console.error("Error al procesar la inscripción:", err);
                     return res.status(500).json({ success: false, message: "Error al procesar la inscripción." });
-                } 
-                else{
-                    res.redirect("/");
                 }
+
+
+                pool.query("INSERT INTO mensajes (user_id, mensaje) VALUES (?, ?)", [usuario_id, mensaje], (err) => {
+                    if (err) {
+                        console.error("Error al guardar el mensaje:", err);
+                        return res.status(500).json({ success: false, message: "Error al guardar el mensaje." });
+                    }
+
+                    res.redirect("/");
+                });
             }
         );
     });
@@ -277,17 +300,28 @@ app.post("/inscribe", (req, res) => {
 
 
 
-
 app.get("/messages", (req, res) => {
     const user_id = req.session.userId;
-    pool.query("SELECT mensaje,creado_en FROM mensajes WHERE user_id=?", [user_id], (err, results) => {
+
+    pool.query("SELECT id, mensaje, creado_en FROM mensajes WHERE user_id=?", [user_id], (err, results) => {
         if (err) {
             console.log("Error al obtener el mensaje");
         }
-        res.render("messages", { user: { nombre: req.session.nombre, correo: req.session.correo, rol: req.session.rol || null }, mensajes: results });
 
+        res.render("messages", {
+            user: {
+                id: user_id,
+                nombre: req.session.nombre,
+                correo: req.session.correo,
+                rol: req.session.rol || null
+
+            },
+
+            mensajes: results
+        });
     });
 });
+
 
 
 
@@ -349,62 +383,123 @@ app.post("/delete/:id", (req, res) => {
             return res.status(500).send("Error al obtener los usuarios inscritos");
         }
         const inscritos = results;
+
+        // Si no hay usuarios inscritos, eliminar el evento directamente
         if (inscritos.length === 0) {
-            console.log("No hay usuarios inscritos en el evento.");
-            return res.status(404).send("No hay usuarios inscritos en el evento");
-        }
-        const titulo = inscritos[0].titulo;
-        const mensaje = `El evento "${titulo}" ha sido eliminado por su organizador. Ya no estás inscrito en este evento.`;
-        const mensajes = inscritos.map((usuario) => [usuario.usuario_id, mensaje]);
-        pool.query("INSERT INTO mensajes (user_id,mensaje) VALUES ?", [mensajes], (err) => {
-            if (err) {
-                console.error("Error al insertar mensajes:", err);
-                return res.status(500).send("Error al insertar mensajes");
-            }
-            pool.query("DELETE FROM inscripciones WHERE evento_id=?", [id], (err) => {
+            pool.query("DELETE FROM eventos WHERE id=?", [id], (err) => {
                 if (err) {
-                    console.error("Error al eliminar inscripciones:", err);
-                    return res.status(500).send("Error al eliminar inscripciones");
+                    console.error("Error al eliminar el evento:", err);
+                    return res.status(500).send("Error al eliminar el evento");
                 }
-                pool.query("DELETE FROM eventos WHERE id=?", [id], (err) => {
+                console.log("Evento eliminado.");
+                return res.redirect("/events");
+            });
+        } else {
+            const titulo = inscritos[0].titulo;
+            const mensaje = `El evento "${titulo}" ha sido eliminado por su organizador. Ya no estás inscrito en este evento.`;
+            const mensajes = inscritos.map((usuario) => [usuario.usuario_id, mensaje]);
 
-                    res.redirect("/");
+            pool.query("INSERT INTO mensajes (user_id,mensaje) VALUES ?", [mensajes], (err) => {
+                if (err) {
+                    console.error("Error al insertar mensajes:", err);
+                    return res.status(500).send("Error al insertar mensajes");
+                }
 
+                pool.query("DELETE FROM inscripciones WHERE evento_id=?", [id], (err) => {
+                    if (err) {
+                        console.error("Error al eliminar inscripciones:", err);
+                        return res.status(500).send("Error al eliminar inscripciones");
+                    }
+
+                    pool.query("DELETE FROM eventos WHERE id=?", [id], (err) => {
+                        if (err) {
+                            console.error("Error al eliminar el evento:", err);
+                            return res.status(500).send("Error al eliminar el evento");
+                        }
+
+                        console.log("Evento y sus inscripciones eliminados.");
+                        res.redirect("/events");
+                    });
                 });
             });
-        });
+        }
     });
 });
+    
+app.post("/delete_message/:id", (req, res) => {
+    const { id } = req.params;
+
+
+
+    pool.query("DELETE FROM mensajes WHERE id = ? ", [id], (err) => {
+        if (err) {
+            console.log("Error al borrar el mensaje:", err);
+            return res.status(500).json({ success: false, message: "Error al borrar el mensaje." });
+        }
+        res.status(200).json({ success: true, message: "Mensaje eliminado con éxito." });
+    });
+});
+
 app.post("/delete_inscription/:id", (req, res) => {
     const { id } = req.params;
     const userId = req.session.userId;
 
-    pool.query("DELETE FROM inscripciones WHERE evento_id = ? AND usuario_id = ?", [id, userId], (err) => {
+
+    pool.query("SELECT e.titulo FROM eventos e WHERE e.id = ?", [id], (err, results) => {
         if (err) {
-            console.log("Error al borrar una inscripción:", err);
-            return res.status(500).json({ success: false, message: "Error al borrar una inscripción." });
+            console.log("Error al obtener el título del evento:", err);
+            return res.status(500).json({ success: false, message: "Error al obtener el título del evento." });
         }
 
-        pool.query("SELECT * FROM inscripciones WHERE evento_id = ? AND estado_inscripcion = 'lista de espera' ORDER BY fecha_inscripcion ASC LIMIT 1", [id], (err, results) => {
+        const eventoTitulo = results[0].titulo;
+
+
+        pool.query("DELETE FROM inscripciones WHERE evento_id = ? AND usuario_id = ?", [id, userId], (err) => {
             if (err) {
-                console.log("Error al obtener la lista de espera:", err);
-                return res.status(500).json({ success: false, message: "Error al obtener la lista de espera." });
+                console.log("Error al borrar una inscripción:", err);
+                return res.status(500).json({ success: false, message: "Error al borrar una inscripción." });
             }
-            else{
-                if (results.length > 0) {
-                    const waitlistedUser = results[0];
-    
-                    pool.query("UPDATE inscripciones SET estado_inscripcion = 'inscrito' WHERE evento_id = ? AND usuario_id = ?", [id, waitlistedUser.usuario_id], (err) => {
-                        if (err) {
-                            console.log("Error al actualizar el estado de inscripción:", err);
-                            return res.status(500).json({ success: false, message: "Error al actualizar el estado de inscripción." });
-                        }
-                        
-                    });
-                } 
-                return res.redirect("/inscriptions");
-            }
-            
+
+
+            const mensajeEliminar = `Usted se ha quitado del evento "${eventoTitulo}".`;
+            pool.query("INSERT INTO mensajes (user_id, mensaje) VALUES (?, ?)", [userId, mensajeEliminar], (err) => {
+                if (err) {
+                    console.log("Error al guardar el mensaje de eliminación:", err);
+                    return res.status(500).json({ success: false, message: "Error al guardar el mensaje de eliminación." });
+                }
+
+
+                pool.query("SELECT e.titulo, i.usuario_id FROM inscripciones i JOIN eventos e ON i.evento_id = e.id WHERE i.evento_id = ? AND i.estado_inscripcion = 'lista de espera' ORDER BY i.fecha_inscripcion ASC LIMIT 1", [id], (err, results) => {
+                    if (err) {
+                        console.log("Error al obtener la lista de espera:", err);
+                        return res.status(500).json({ success: false, message: "Error al obtener la lista de espera." });
+                    }
+
+                    if (results.length > 0) {
+                        const waitlistedUser = results[0];
+
+                        pool.query("UPDATE inscripciones SET estado_inscripcion = 'inscrito' WHERE evento_id = ? AND usuario_id = ?", [id, waitlistedUser.usuario_id], (err) => {
+                            if (err) {
+                                console.log("Error al actualizar el estado de inscripción:", err);
+                                return res.status(500).json({ success: false, message: "Error al actualizar el estado de inscripción." });
+                            }
+
+                            const mensajeListaEspera = `Usted se ha pasado de la lista de espera a inscrito en el evento "${eventoTitulo}".`;
+
+                            pool.query("INSERT INTO mensajes (user_id, mensaje) VALUES (?, ?)", [waitlistedUser.usuario_id, mensajeListaEspera], (err) => {
+                                if (err) {
+                                    console.log("Error al guardar el mensaje de lista de espera:", err);
+                                    return res.status(500).json({ success: false, message: "Error al guardar el mensaje de lista de espera." });
+                                }
+
+                                return res.redirect("/inscriptions");
+                            });
+                        });
+                    } else {
+                        return res.redirect("/inscriptions");
+                    }
+                });
+            });
         });
     });
 });
@@ -458,9 +553,11 @@ app.get("/inscriptions", (req, res) => {
     let params = [userId];
 
     if (searchTerm) {
-        sql += " AND (E.titulo LIKE ? OR E.descripcion LIKE ?)";
-        params.push(`%${searchTerm}%`, `%${searchTerm}%`);
-    }
+         sql += ` AND ( E.titulo LIKE ? OR E.descripcion LIKE ? OR E.fecha LIKE ? OR E.tipo LIKE ? OR E.ubicacion LIKE ? 
+            OR E.capacidad_maxima LIKE ? ) `; 
+        const wildcardSearch = `%${searchTerm}%`; 
+        params.push(wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch);
+     }
 
     pool.query(sql, params, (err, results) => {
         if (err) {
@@ -479,10 +576,19 @@ app.get("/events", (req, res) => {
 
     let query = "SELECT id, titulo, descripcion, fecha, hora, ubicacion, capacidad_maxima, tipo FROM eventos WHERE organizador_id = ?";
     let params = [org_id];
-
     if (searchTerm) {
-        query += " AND (titulo LIKE ? OR descripcion LIKE ?)";
-        params.push(`%${searchTerm}%`, `%${searchTerm}%`);
+        query += `
+            AND (
+                titulo LIKE ? 
+                OR descripcion LIKE ? 
+                OR fecha LIKE ? 
+                OR tipo LIKE ? 
+                OR ubicacion LIKE ? 
+                OR capacidad_maxima LIKE ?
+            )
+        `;
+        const wildcardSearch = `%${searchTerm}%`;
+        params.push(wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch, wildcardSearch);
     }
 
     pool.query(query, params, (err, results) => {
@@ -494,6 +600,8 @@ app.get("/events", (req, res) => {
         }
     });
 });
+
+
 
 
 app.get("/listAlumns", (req, res) => {

@@ -473,11 +473,14 @@
                 method: "POST",
                 data: $(this).serialize(),
                 success: function (response) {
+                    alert("Se ha creado el evento ");
                     $('#modal-body-content').text('Evento creado con el nombre: ' + response.titulo);
                     $("#exampleModal").show("show");
+                    location.reload();
                 },
                 error: function () {
                     alert("Hubo un error al crear el evento.");
+                    
                 }
             });
         });
@@ -505,7 +508,6 @@
                 element.style.color = "";
             });
 
-            // Restablecer más elementos según sea necesario...
         }
 
         function lightTheme() {
