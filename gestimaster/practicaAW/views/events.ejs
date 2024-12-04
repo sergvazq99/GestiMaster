@@ -209,43 +209,45 @@
                       </button>
                        
                         </p>
-                     <!-- Modal para personalizar el evento -->
-<div class="modal fade" id="customizeModal-<%= evento.id %>" tabindex="-1" aria-labelledby="customizeModalLabel-<%= evento.id %>" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="customizeModalLabel-<%= evento.id %>">Personalizar Evento: <%= evento.titulo %></h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form class="customize-event-form">
-                  <div class="mb-3">
-                      <label for="font-family-<%= evento.id %>" class="form-label">Fuente</label>
-                      <select class="form-select" id="font-family-<%= evento.id %>" name="font-family" onchange="applyCustomization('<%= evento.id %>')">
-                          <option value="Arial">Arial</option>
-                          <option value="Courier New">Courier New</option>
-                          <option value="Georgia">Georgia</option>
-                          <option value="Times New Roman">Times New Roman</option>
-                          <option value="Verdana">Verdana</option>
-                      </select>
-                  </div>
-                  <div class="mb-3">
-                      <label for="font-size-<%= evento.id %>" class="form-label">Tamaño de la letra</label>
-                      <input type="number" class="form-control" id="font-size-<%= evento.id %>" name="font-size" min="10" max="30" value="14" oninput="applyCustomization('<%= evento.id %>')">
-                  </div>
-                  <div class="mb-3">
-                      <label for="text-color-<%= evento.id %>" class="form-label">Color de la letra</label>
-                      <input type="color" class="form-control" id="text-color-<%= evento.id %>" name="text-color" value="#000000" onchange="applyCustomization('<%= evento.id %>')">
-                  </div>
-                  <div class="mb-3">
-                      <label for="background-color-<%= evento.id %>" class="form-label">Color de fondo</label>
-                      <input type="color" class="form-control" id="background-color-<%= evento.id %>" name="background-color" value="#FFFFFF" onchange="applyCustomization('<%= evento.id %>')">
-                  </div>
-              </form>
-          </div>
-      </div>
+  <!-- Modal para personalizar el evento -->
+  <div class="modal fade" id="customizeModal-<%= evento.id %>" tabindex="-1" aria-labelledby="customizeModalLabel-<%= evento.id %>" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customizeModalLabel-<%= evento.id %>">Personalizar Evento: <%= evento.titulo %></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="customize-event-form" onsubmit="saveCustomization(event, '<%= evento.id %>')">
+                    <div class="mb-3">
+                        <label for="font-family-<%= evento.id %>" class="form-label">Fuente</label>
+                        <select class="form-select" id="font-family-<%= evento.id %>" name="font-family">
+                            <option value="Arial">Arial</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="font-size-<%= evento.id %>" class="form-label">Tamaño de la letra</label>
+                        <input type="number" class="form-control" id="font-size-<%= evento.id %>" name="font-size" min="10" max="30" value="14">
+                    </div>
+                    <div class="mb-3">
+                        <label for="text-color-<%= evento.id %>" class="form-label">Color de la letra</label>
+                        <input type="color" class="form-control" id="text-color-<%= evento.id %>" name="text-color" value="#000000">
+                    </div>
+                    <div class="mb-3">
+                        <label for="background-color-<%= evento.id %>" class="form-label">Color de fondo</label>
+                        <input type="color" class="form-control" id="background-color-<%= evento.id %>" name="background-color" value="#FFFFFF">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
   </div>
-</div>
+
 
 
                       <div class="modal fade" id="editModal-<%= evento.id %>" tabindex="-1" aria-labelledby="editModalLabel-<%= evento.id %>" aria-hidden="true">
@@ -496,21 +498,51 @@ document.getElementById('searchForm').addEventListener('submit', function (event
     }
 
     
-    function applyCustomization(eventId) {
+    
+    
+    function saveCustomization(event, eventId) {
+        event.preventDefault();
         const fontFamily = document.getElementById(`font-family-${eventId}`).value;
         const fontSize = document.getElementById(`font-size-${eventId}`).value + 'px';
         const textColor = document.getElementById(`text-color-${eventId}`).value;
         const backgroundColor = document.getElementById(`background-color-${eventId}`).value;
 
-        const card = document.querySelector(`[data-event-id="${eventId}"]`);
+        const styles = {
+            fontFamily: fontFamily,
+            fontSize: fontSize,
+            textColor: textColor,
+            backgroundColor: backgroundColor
+        };
 
-        card.style.fontFamily = fontFamily;
-        card.style.fontSize = fontSize;
-        card.style.color = textColor;
-        card.style.backgroundColor = backgroundColor;
-
-      
+        localStorage.setItem(`customization-${eventId}`, JSON.stringify(styles));
+        applyCustomization(eventId);
     }
+
+    function applyCustomization(eventId) {
+        const styles = JSON.parse(localStorage.getItem(`customization-${eventId}`));
+        if (styles) {
+            const card = document.querySelector(`[data-event-id="${eventId}"]`);
+            const cardBody = card.querySelector('.card-body');
+
+            card.style.fontFamily = styles.fontFamily;
+            card.style.fontSize = styles.fontSize;
+            card.style.color = styles.textColor;
+            card.style.backgroundColor = styles.backgroundColor;
+
+            cardBody.style.color = styles.textColor;
+            cardBody.style.backgroundColor = styles.backgroundColor;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const eventCards = document.querySelectorAll('[data-event-id]');
+        eventCards.forEach(card => {
+            const eventId = card.getAttribute('data-event-id');
+            applyCustomization(eventId);
+        });
+    });
+
+
 
 
 
